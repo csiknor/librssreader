@@ -300,9 +300,9 @@ class Item(object):
 
         self.canUnread = item.get('isReadStateLocked', 'false') != 'true'
         self.published = item.get('published', '')
-        if self.published and self.published != '':
-            self.published = time.strftime('%m/%d %H:%M',
-                                           time.localtime(self.published))
+        # if self.published and self.published != '':
+        #     self.published = time.strftime('%m/%d %H:%M',
+        #                                    time.localtime(self.published))
 
         # keep feed, can be used when item is fetched from a special feed, then it's the original one
         try:
