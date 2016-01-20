@@ -55,10 +55,12 @@ class ClientAuthMethod(AuthenticationMethod):
     Auth type which requires a valid Google Reader username and password
     """
 
-    def __init__(self, username, password):
+    def __init__(self, username, password, app_id=None, app_key=None):
         super(ClientAuthMethod, self).__init__()
         self.username   = username
         self.password   = password
+        self.app_id = app_id
+        self.app_key = app_key
         self.auth_token = self._getAuth()
         self.token      = self._getToken()
 
@@ -72,6 +74,10 @@ class ClientAuthMethod(AuthenticationMethod):
         """
         getString = self.getParameters(parameters)
         headers = {'Authorization':'GoogleLogin auth=%s' % self.auth_token}
+        if self.app_id:
+            headers['AppId'] = self.app_id
+        if self.app_key:
+            headers['AppKey'] = self.app_key
         req = requests.get(url + "?" + getString, headers=headers)
         return req.text
 
@@ -84,6 +90,10 @@ class ClientAuthMethod(AuthenticationMethod):
         headers = {'Authorization':'GoogleLogin auth=%s' % self.auth_token,
                     'Content-Type': 'application/x-www-form-urlencoded'
                     }
+        if self.app_id:
+            headers['AppId'] = self.app_id
+        if self.app_key:
+            headers['AppKey'] = self.app_key
         postString = self.postParameters(postParameters)
         req = requests.post(url, data=postString, headers=headers)
         return req.text
@@ -117,9 +127,13 @@ class ClientAuthMethod(AuthenticationMethod):
         Returns token or raises IOError on error.
         """
         headers = {'Authorization':'GoogleLogin auth=%s' % self.auth_token}
+        if self.app_id:
+            headers['AppId'] = self.app_id
+        if self.app_key:
+            headers['AppKey'] = self.app_key
         req = requests.get(ReaderBasicConfig.API_URL + 'token', headers=headers)
         if req.status_code != 200:
-            raise IOError("Error getting the Reader token.")
+            raise IOError("Error getting the Reader token %d, url: %s." % (req.status_code, ReaderBasicConfig.API_URL))
         return req.content
 
 class OAuthMethod(AuthenticationMethod):

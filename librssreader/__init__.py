@@ -5,7 +5,7 @@
 # Python library for the Google Reader Like API
 
 __author__ = "Zigler Zhang <zigler.zhang@gmail.com>"
-__version__ = "0.0.8"
+__version__ = "0.0.9"
 __copyright__ = "MIT License"
 
 try:
